@@ -18,6 +18,7 @@ async function Transcription(filePath) {
         });
     
         console.log("Transcription complete.");
+        console.log("Transcrição: " + transcription.text);
 
         return transcription.text;
     } catch (err) {

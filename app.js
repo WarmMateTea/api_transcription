@@ -6,6 +6,7 @@ import path from "path";
 import cors from 'cors';
 import { Transcription } from './transcription.js';
 import { fileURLToPath } from 'url';
+import { requestToSingleChatSummarizeEndpoint } from "./requests.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -64,9 +65,26 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     Transcription(filePath)
         .then((result) => {
             console.log("Transcription success!");
+
+            requestToSingleChatSummarizeEndpoint(result);
+
             return res.status(200).json({result});
         }).catch((err) => {
             console.error("Error during transcription: ", err);
             return res.status(500).json({message: 'Error during transcription'});
+        });
+})
+
+app.post('/api/testrequest', (req, res) => {
+
+    const rawText = req.body['content'];
+
+    requestToSingleChatSummarizeEndpoint(rawText)
+        .then((result) => {
+            console.log("External request sent!");
+            return res.status(200).json({message: 'request sent'}); 
+        }).catch((err) => {
+            console.error("Error during external request: ", err);
+            return res.status(500).json({message: 'Error during external request'});
         });
 })
