@@ -3,6 +3,7 @@ config();
 import express from "express";
 import multer from "multer";
 import path from "path";
+import cors from 'cors';
 import { Transcription } from './transcription.js';
 import { fileURLToPath } from 'url';
 
@@ -10,6 +11,7 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.json());
+app.use(cors());
 
 const port = process.env.TOKEN_SERVER_PORT;
 
@@ -45,6 +47,8 @@ app.all('/api/*', checkApiKey);
 
 // caminho pra receber o arquivo de áudio + chave
 app.post('/api/upload', upload.single('file'), (req, res) => {
+    console.log("New Request at ", Date.now());
+
     console.log("Uploaded file: ", req.file);
     
     // TODO: checar tamanho do arquivo; se maior que 25MB, fragmentar (pesquisar como :) )
