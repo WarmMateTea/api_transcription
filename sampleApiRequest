@@ -1,0 +1,7 @@
+route: /api/upload
+
+headers:
+    "x-api-key": API_KEY
+
+body (form-data):
+    "file": FILE
